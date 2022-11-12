@@ -1,0 +1,758 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Lucene.Net.Misc</name>
+    </assembly>
+    <members>
+        <member name="T:Lucene.Net.Documents.LazyDocument">
+            <summary>
+            Defers actually loading a field's value until you ask
+             for it.  You must not use the returned Field instances
+             after the provided reader has been closed. </summary>
+            <seealso cref="M:Lucene.Net.Documents.LazyDocument.GetField(Lucene.Net.Index.FieldInfo)"/>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.GetField(Lucene.Net.Index.FieldInfo)">
+            <summary>
+            Creates an IndexableField whose value will be lazy loaded if and 
+            when it is used. 
+            <para>
+            <b>NOTE:</b> This method must be called once for each value of the field 
+            name specified in sequence that the values exist.  This method may not be 
+            used to generate multiple, lazy, IndexableField instances refering to 
+            the same underlying IndexableField instance.
+            </para>
+            <para>
+            The lazy loading of field values from all instances of IndexableField 
+            objects returned by this method are all backed by a single Document 
+            per LazyDocument instance.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.GetDocument">
+            <summary>
+            non-private for test only access
+            @lucene.internal 
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Documents.LazyDocument.LazyField">
+            <summary>
+            @lucene.internal 
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Documents.LazyDocument.LazyField.HasBeenLoaded">
+            <summary>
+            non-private for test only access
+            @lucene.internal 
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Documents.LazyDocument.LazyField.Name">
+            <summary>
+            The field's name
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Documents.LazyDocument.LazyField.Boost">
+            <summary>
+            Gets the boost factor on this field.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetBinaryValue">
+            <summary>
+            Non-null if this field has a binary value. </summary>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue">
+            <summary>
+            The value of the field as a <see cref="T:System.String"/>, or <c>null</c>. If <c>null</c>, the <see cref="T:System.IO.TextReader"/> value or
+            binary value is used. Exactly one of <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue"/>, <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetReaderValue"/>, and
+            <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetBinaryValue"/> must be set.
+            </summary>
+            <returns>The string representation of the value if it is either a <see cref="T:System.String"/> or numeric type.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue(System.IFormatProvider)">
+            <summary>
+            The value of the field as a <see cref="T:System.String"/>, or <c>null</c>. If <c>null</c>, the <see cref="T:System.IO.TextReader"/> value or
+            binary value is used. Exactly one of <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue"/>, <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetReaderValue"/>, and
+            <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetBinaryValue"/> must be set.
+            </summary>
+            <param name="provider">An object that supplies culture-specific formatting information. This parameter has no effect if this field is non-numeric.</param>
+            <returns>The string representation of the value if it is either a <see cref="T:System.String"/> or numeric type.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue(System.String)">
+            <summary>
+            The value of the field as a <see cref="T:System.String"/>, or <c>null</c>. If <c>null</c>, the <see cref="T:System.IO.TextReader"/> value or
+            binary value is used. Exactly one of <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue"/>, <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetReaderValue"/>, and
+            <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetBinaryValue"/> must be set.
+            </summary>
+            <param name="format">A standard or custom numeric format string. This parameter has no effect if this field is non-numeric.</param>
+            <returns>The string representation of the value if it is either a <see cref="T:System.String"/> or numeric type.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue(System.String,System.IFormatProvider)">
+            <summary>
+            The value of the field as a <see cref="T:System.String"/>, or <c>null</c>. If <c>null</c>, the <see cref="T:System.IO.TextReader"/> value or
+            binary value is used. Exactly one of <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue"/>, <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetReaderValue"/>, and
+            <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetBinaryValue"/> must be set.
+            </summary>
+            <param name="format">A standard or custom numeric format string. This parameter has no effect if this field is non-numeric.</param>
+            <param name="provider">An object that supplies culture-specific formatting information. This parameter has no effect if this field is non-numeric.</param>
+            <returns>The string representation of the value if it is either a <see cref="T:System.String"/> or numeric type.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetReaderValue">
+            <summary>
+            The value of the field as a <see cref="T:System.IO.TextReader"/>, or <c>null</c>. If <c>null</c>, the <see cref="T:System.String"/> value or
+            binary value is used. Exactly one of <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetStringValue"/>, <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetReaderValue"/>, and
+            <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetBinaryValue"/> must be set.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Documents.LazyDocument.LazyField.NumericType">
+            <summary>
+            Gets the <see cref="T:Lucene.Net.Documents.NumericFieldType"/> of the underlying value, or <see cref="F:Lucene.Net.Documents.NumericFieldType.NONE"/> if the value is not set or non-numeric.
+            <para/>
+            Expert: The difference between this property and <see cref="P:Lucene.Net.Documents.FieldType.NumericType"/> is 
+            this is represents the current state of the field (whether being written or read) and the
+            <see cref="P:Lucene.Net.Documents.LazyDocument.LazyField.FieldType"/> property represents instructions on how the field will be written,
+            but does not re-populate when reading back from an index (it is write-only).
+            <para/>
+            In Java, the numeric type was determined by checking the type of  
+            <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetNumericValue"/>. However, since there are no reference number
+            types in .NET, using <see cref="M:Lucene.Net.Documents.LazyDocument.LazyField.GetNumericValue"/> so will cause boxing/unboxing. It is
+            therefore recommended to use this property to check the underlying type and the corresponding 
+            <c>Get*Value()</c> method to retrieve the value.
+            <para/>
+            NOTE: Since Lucene codecs do not support <see cref="F:Lucene.Net.Documents.NumericFieldType.BYTE"/> or <see cref="F:Lucene.Net.Documents.NumericFieldType.INT16"/>,
+            fields created with these types will always be <see cref="F:Lucene.Net.Documents.NumericFieldType.INT32"/> when read back from the index.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetByteValue">
+            <summary>
+            Returns the field value as <see cref="T:System.Byte"/> or <c>null</c> if the type
+            is non-numeric.
+            </summary>
+            <returns>The field value or <c>null</c> if the type is non-numeric.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetInt16Value">
+            <summary>
+            Returns the field value as <see cref="T:System.Int16"/> or <c>null</c> if the type
+            is non-numeric.
+            </summary>
+            <returns>The field value or <c>null</c> if the type is non-numeric.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetInt32Value">
+            <summary>
+            Returns the field value as <see cref="T:System.Int32"/> or <c>null</c> if the type
+            is non-numeric.
+            </summary>
+            <returns>The field value or <c>null</c> if the type is non-numeric.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetInt64Value">
+            <summary>
+            Returns the field value as <see cref="T:System.Int64"/> or <c>null</c> if the type
+            is non-numeric.
+            </summary>
+            <returns>The field value or <c>null</c> if the type is non-numeric.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetSingleValue">
+            <summary>
+            Returns the field value as <see cref="T:System.Single"/> or <c>null</c> if the type
+            is non-numeric.
+            </summary>
+            <returns>The field value or <c>null</c> if the type is non-numeric.</returns>
+        </member>
+        <member name="M:Lucene.Net.Documents.LazyDocument.LazyField.GetDoubleValue">
+            <summary>
+            Returns the field value as <see cref="T:System.Double"/> or <c>null</c> if the type
+            is non-numeric.
+            </summary>
+            <returns>The field value or <c>null</c> if the type is non-numeric.</returns>
+        </member>
+        <member name="P:Lucene.Net.Documents.LazyDocument.LazyField.FieldType">
+            <summary>
+            Returns the <see cref="T:Lucene.Net.Documents.FieldType"/> for this field as type <see cref="T:Lucene.Net.Documents.FieldType"/>. </summary>
+        </member>
+        <member name="P:Lucene.Net.Documents.LazyDocument.LazyField.IndexableFieldType">
+            <summary>
+            Returns the <see cref="T:Lucene.Net.Documents.FieldType"/> for this field as type <see cref="T:Lucene.Net.Index.IIndexableFieldType"/>. </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.CompoundFileExtractor">
+            <summary>
+            Command-line tool for extracting sub-files out of a compound file.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.CompoundFileExtractor.Main(System.String[])">
+            <summary>
+            Prints the filename and size of each file within a given compound file.
+            Add the -extract flag to extract files to the current working directory.
+            In order to make the extracted version of the index work, you have to copy
+            the segments file from the compound index into the directory where the extracted files are stored. </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.IndexSplitter">
+            <summary>
+            Command-line tool that enables listing segments in an
+            index, copying specific segments to another index, and
+            deleting segments from an index.
+            
+            <para>This tool does file-level copying of segments files.
+            This means it's unable to split apart a single segment
+            into multiple segments.  For example if your index is a
+            single segment, this tool won't help.  Also, it does basic
+            file-level copying (using simple
+            Stream) so it will not work with non
+            FSDirectory Directory impls.</para>
+            
+            @lucene.experimental You can easily
+            accidentally remove segments from your index so be
+            careful!
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.MultiPassIndexSplitter">
+            <summary>
+            This tool splits input index into multiple equal parts. The method employed
+            here uses <see cref="M:Lucene.Net.Index.IndexWriter.AddIndexes(Lucene.Net.Index.IndexReader[])"/> where the input data
+            comes from the input index with artificially applied deletes to the document
+            id-s that fall outside the selected partition.
+            <para>Note 1: Deletes are only applied to a buffered list of deleted docs and
+            don't affect the source index - this tool works also with read-only indexes.
+            </para>
+            <para>Note 2: the disadvantage of this tool is that source index needs to be
+            read as many times as there are parts to be created, hence the name of this
+            tool.
+            
+            </para>
+            <para><b>NOTE</b>: this tool is unaware of documents added
+            atomically via <see cref="M:Lucene.Net.Index.IndexWriter.AddDocuments(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)"/> or 
+            <see cref="M:Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term,System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)"/>, which means it can easily
+            break up such document groups.
+            </para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.MultiPassIndexSplitter.Split(Lucene.Net.Util.LuceneVersion,Lucene.Net.Index.IndexReader,Lucene.Net.Store.Directory[],System.Boolean)">
+            <summary>
+            Split source index into multiple parts. </summary>
+            <param name="version">lucene compatibility version</param>
+            <param name="in"> source index, can have deletions, can have
+            multiple segments (or multiple readers). </param>
+            <param name="outputs"> list of directories where the output parts will be stored. </param>
+            <param name="seq"> if true, then the source index will be split into equal
+            increasing ranges of document id-s. If false, source document id-s will be
+            assigned in a deterministic round-robin fashion to one of the output splits. </param>
+            <exception cref="T:System.IO.IOException"> If there is a low-level I/O error </exception>
+        </member>
+        <member name="T:Lucene.Net.Index.MultiPassIndexSplitter.FakeDeleteIndexReader">
+            <summary>
+            This class emulates deletions on the underlying index.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.PKIndexSplitter">
+            <summary>
+            Split an index based on a <see cref="T:Lucene.Net.Search.Filter"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.PKIndexSplitter.#ctor(Lucene.Net.Util.LuceneVersion,Lucene.Net.Store.Directory,Lucene.Net.Store.Directory,Lucene.Net.Store.Directory,Lucene.Net.Search.Filter)">
+            <summary>
+            Split an index based on a <see cref="T:Lucene.Net.Search.Filter"/>. All documents that match the filter
+            are sent to dir1, remaining ones to dir2.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.PKIndexSplitter.#ctor(Lucene.Net.Util.LuceneVersion,Lucene.Net.Store.Directory,Lucene.Net.Store.Directory,Lucene.Net.Store.Directory,Lucene.Net.Index.Term)">
+            <summary>
+            Split an index based on a  given primary key term 
+            and a 'middle' term.  If the middle term is present, it's
+            sent to dir2.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.BlockJoinComparerSource">
+            <summary>
+            Helper class to sort readers that contain blocks of documents.
+            <para>
+            Note that this class is intended to used with <see cref="T:Lucene.Net.Index.Sorter.SortingMergePolicy"/>,
+            and for other purposes has some limitations:
+            <list type="bullet">
+               <item><description>Cannot yet be used with <see cref="M:Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc,Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)">
+               IndexSearcher.SearchAfter</see></description></item>
+               <item><description>Filling sort field values is not yet supported.</description></item>
+            </list>
+            @lucene.experimental
+            </para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.BlockJoinComparerSource.#ctor(Lucene.Net.Search.Filter,Lucene.Net.Search.Sort)">
+            <summary>
+            Create a new BlockJoinComparerSource, sorting only blocks of documents
+            with <paramref name="parentSort"/> and not reordering children with a block.
+            </summary>
+            <param name="parentsFilter"> Filter identifying parent documents </param>
+            <param name="parentSort"> Sort for parent documents </param>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.BlockJoinComparerSource.#ctor(Lucene.Net.Search.Filter,Lucene.Net.Search.Sort,Lucene.Net.Search.Sort)">
+            <summary>
+            Create a new BlockJoinComparerSource, specifying the sort order for both
+            blocks of documents and children within a block.
+            </summary>
+            <param name="parentsFilter"> Filter identifying parent documents </param>
+            <param name="parentSort"> Sort for parent documents </param>
+            <param name="childSort"> Sort for child documents in the same block </param>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector">
+            <summary>
+            A <see cref="T:Lucene.Net.Search.ICollector"/> that early terminates collection of documents on a
+            per-segment basis, if the segment was sorted according to the given
+            <see cref="T:Lucene.Net.Search.Sort"/>.
+            
+            <para>
+            <b>NOTE:</b> the <see cref="T:Lucene.Net.Search.ICollector"/> detects sorted segments according to
+            <see cref="T:Lucene.Net.Index.Sorter.SortingMergePolicy"/>, so it's best used in conjunction with it. Also,
+            it collects up to a specified <see cref="F:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.m_numDocsToCollect"/> from each segment, 
+            and therefore is mostly suitable for use in conjunction with collectors such as
+            <see cref="T:Lucene.Net.Search.TopDocsCollector`1"/>, and not e.g. <see cref="T:Lucene.Net.Search.TotalHitCountCollector"/>.
+            </para>
+            <para>
+            <b>NOTE</b>: If you wrap a <see cref="T:Lucene.Net.Search.TopDocsCollector`1"/> that sorts in the same
+            order as the index order, the returned <see cref="M:Lucene.Net.Search.TopDocsCollector`1.GetTopDocs">TopDocs</see>
+            will be correct. However the total of <see cref="P:Lucene.Net.Search.TopDocsCollector`1.TotalHits"/>
+            hit count will be underestimated since not all matching documents will have
+            been collected.
+            </para>
+            <para>
+            <b>NOTE</b>: This <see cref="T:Lucene.Net.Search.ICollector"/> uses <see cref="M:Lucene.Net.Search.Sort.ToString"/> to detect
+            whether a segment was sorted with the same <see cref="T:Lucene.Net.Search.Sort"/>. This has
+            two implications:
+            <ul>
+            <li>if a custom comparer is not implemented correctly and returns
+            different identifiers for equivalent instances, this collector will not
+            detect sorted segments,</li>
+            <li>if you suddenly change the <see cref="T:Lucene.Net.Index.IndexWriter"/>'s
+            <see cref="T:Lucene.Net.Index.Sorter.SortingMergePolicy"/> to sort according to another criterion and if both
+            the old and the new <see cref="T:Lucene.Net.Search.Sort"/>s have the same identifier, this
+            <see cref="T:Lucene.Net.Search.ICollector"/> will incorrectly detect sorted segments.</li>
+            </ul>
+            
+            @lucene.experimental
+            </para>
+            </summary>
+        </member>
+        <member name="F:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.m_in">
+            <summary>
+            The wrapped Collector </summary>
+        </member>
+        <member name="F:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.m_sort">
+            <summary>
+            Sort used to sort the search results </summary>
+        </member>
+        <member name="F:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.m_numDocsToCollect">
+            <summary>
+            Number of documents to collect in each segment </summary>
+        </member>
+        <member name="F:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.m_segmentTotalCollect">
+            <summary>
+            Number of documents to collect in the current segment being processed </summary>
+        </member>
+        <member name="F:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.m_segmentSorted">
+            <summary>
+            True if the current segment being processed is sorted by <see cref="M:Lucene.Net.Search.Sort.#ctor"/> </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector.#ctor(Lucene.Net.Search.ICollector,Lucene.Net.Search.Sort,System.Int32)">
+            <summary>
+            Create a new <see cref="T:Lucene.Net.Index.Sorter.EarlyTerminatingSortingCollector"/> instance.
+            </summary>
+            <param name="in">
+                     the collector to wrap </param>
+            <param name="sort">
+                     the sort you are sorting the search results on </param>
+            <param name="numDocsToCollect">
+                     the number of documents to collect on each segment. When wrapping
+                     a <see cref="T:Lucene.Net.Search.TopDocsCollector`1"/>, this number should be the number of
+                     hits. </param>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.Sorter">
+            <summary>
+            Sorts documents of a given index by returning a permutation on the document
+            IDs.
+            @lucene.experimental
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.#ctor(Lucene.Net.Search.Sort)">
+            <summary>
+            Creates a new Sorter to sort the index with <paramref name="sort"/>.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.Sorter.DocMap">
+            <summary>
+            A permutation of doc IDs. For every document ID between <c>0</c> and
+            <see cref="P:Lucene.Net.Index.IndexReader.MaxDoc"/>, <c>OldToNew(NewToOld(docID))</c> must
+            return <c>docID</c>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.DocMap.OldToNew(System.Int32)">
+            <summary>
+            Given a doc ID from the original index, return its ordinal in the
+            sorted index. 
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.DocMap.NewToOld(System.Int32)">
+            <summary>
+            Given the ordinal of a doc ID, return its doc ID in the original index. 
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Index.Sorter.Sorter.DocMap.Count">
+            <summary>
+            Return the number of documents in this map. This must be equal to the
+            <see cref="P:Lucene.Net.Index.IndexReader.MaxDoc"/> number of documents of the
+            <see cref="T:Lucene.Net.Index.AtomicReader"/> which is sorted. 
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.IsConsistent(Lucene.Net.Index.Sorter.Sorter.DocMap)">
+            <summary>
+            Check consistency of a <see cref="T:Lucene.Net.Index.Sorter.Sorter.DocMap"/>, useful for assertions.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.Sorter.DocComparer">
+            <summary>
+            A comparer of doc IDs.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.DocComparer.Compare(System.Int32,System.Int32)">
+            <summary>
+            Compare <paramref name="docID1"/> against <paramref name="docID2"/>. The contract for the return value is the
+            same as <see cref="M:System.Collections.Generic.IComparer`1.Compare(`0,`0)"/>. 
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.Sort(System.Int32,Lucene.Net.Index.Sorter.Sorter.DocComparer)">
+            <summary>
+            Computes the old-to-new permutation over the given comparer.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.Sorter.Sort(Lucene.Net.Index.AtomicReader)">
+            <summary>
+            Returns a mapping from the old document ID to its new location in the
+            sorted index. Implementations can use the auxiliary
+            <see cref="M:Lucene.Net.Index.Sorter.Sorter.Sort(System.Int32,Lucene.Net.Index.Sorter.Sorter.DocComparer)"/> to compute the old-to-new permutation
+            given a list of documents and their corresponding values.
+            <para>
+            A return value of <c>null</c> is allowed and means that
+            <c>reader</c> is already sorted.
+            </para>
+            <para>
+            <b>NOTE:</b> deleted documents are expected to appear in the mapping as
+            well, they will however be marked as deleted in the sorted view.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Index.Sorter.Sorter.ID">
+            <summary>
+            Returns the identifier of this <see cref="T:Lucene.Net.Index.Sorter.Sorter"/>.
+            <para>This identifier is similar to <see cref="M:System.Object.GetHashCode"/> and should be
+            chosen so that two instances of this class that sort documents likewise
+            will have the same identifier. On the contrary, this identifier should be
+            different on different <see cref="T:Lucene.Net.Search.Sort">sorts</see>.
+            </para>
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.SortingAtomicReader">
+            <summary>
+            An <see cref="T:Lucene.Net.Index.AtomicReader"/> which supports sorting documents by a given
+            <see cref="T:Lucene.Net.Search.Sort"/>. You can use this class to sort an index as follows:
+            
+            <code>
+            IndexWriter writer; // writer to which the sorted index will be added
+            DirectoryReader reader; // reader on the input index
+            Sort sort; // determines how the documents are sorted
+            AtomicReader sortingReader = SortingAtomicReader.Wrap(SlowCompositeReaderWrapper.Wrap(reader), sort);
+            writer.AddIndexes(reader);
+            reader.Dispose(); // alternatively, you can use a using block
+            writer.Dispose(); // alternatively, you can use a using block
+            </code>
+            
+            @lucene.experimental
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Index.Sorter.SortingAtomicReader.SortingDocsEnum.Wrapped">
+            <summary>
+            Returns the wrapped <see cref="T:Lucene.Net.Index.DocsEnum"/>. </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.SortingAtomicReader.SortingDocsAndPositionsEnum.DocOffsetSorter">
+            <summary>
+            A <see cref="T:Lucene.Net.Util.TimSorter"/> which sorts two parallel arrays of doc IDs and
+            offsets in one go. Everytime a doc ID is 'swapped', its correponding offset
+            is swapped too.
+            </summary>
+        </member>
+        <member name="P:Lucene.Net.Index.Sorter.SortingAtomicReader.SortingDocsAndPositionsEnum.Wrapped">
+            <summary>
+            Returns the wrapped <see cref="T:Lucene.Net.Index.DocsAndPositionsEnum"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.SortingAtomicReader.Wrap(Lucene.Net.Index.AtomicReader,Lucene.Net.Search.Sort)">
+            <summary>
+            Return a sorted view of <paramref name="reader"/> according to the order
+            defined by <paramref name="sort"/>. If the reader is already sorted, this
+            method might return the reader as-is. 
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.SortingAtomicReader.Wrap(Lucene.Net.Index.AtomicReader,Lucene.Net.Index.Sorter.Sorter.DocMap)">
+            <summary>
+            Expert: same as <see cref="M:Lucene.Net.Index.Sorter.SortingAtomicReader.Wrap(Lucene.Net.Index.AtomicReader,Lucene.Net.Search.Sort)"/> but operates directly on a <see cref="T:Lucene.Net.Index.Sorter.Sorter.DocMap"/>.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Index.Sorter.SortingMergePolicy">
+            <summary>
+            A <see cref="T:Lucene.Net.Index.MergePolicy"/> that reorders documents according to a <see cref="T:Lucene.Net.Search.Sort"/>
+            before merging them. As a consequence, all segments resulting from a merge
+            will be sorted while segments resulting from a flush will be in the order
+            in which documents have been added.
+            <para><b>NOTE</b>: Never use this policy if you rely on
+            <see cref="M:Lucene.Net.Index.IndexWriter.AddDocuments(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)">IndexWriter.AddDocuments</see> 
+            to have sequentially-assigned doc IDs, this policy will scatter doc IDs.
+            </para>
+            <para><b>NOTE</b>: This policy should only be used with idempotent <see cref="T:Lucene.Net.Search.Sort"/>s 
+            so that the order of segments is predictable. For example, using 
+            <see cref="F:Lucene.Net.Search.Sort.INDEXORDER"/> in reverse (which is not idempotent) will make 
+            the order of documents in a segment depend on the number of times the segment 
+            has been merged.
+            @lucene.experimental 
+            </para>
+            </summary>
+        </member>
+        <member name="F:Lucene.Net.Index.Sorter.SortingMergePolicy.SORTER_ID_PROP">
+            <summary>
+            Put in the <see cref="P:Lucene.Net.Index.SegmentInfo.Diagnostics">diagnostics</see> to denote that
+            this segment is sorted.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.SortingMergePolicy.IsSorted(Lucene.Net.Index.AtomicReader,Lucene.Net.Search.Sort)">
+            <summary>
+            Returns <c>true</c> if the given <paramref name="reader"/> is sorted by the specified <paramref name="sort"/>.
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Index.Sorter.SortingMergePolicy.#ctor(Lucene.Net.Index.MergePolicy,Lucene.Net.Search.Sort)">
+            <summary>
+            Create a new <see cref="T:Lucene.Net.Index.MergePolicy"/> that sorts documents with the given <paramref name="sort"/>.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.GetTermInfo">
+            <summary>
+            Utility to get document frequency and total number of occurrences (sum of the tf for each doc)  of a term. 
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.HighFreqTerms">
+            <summary>
+            <see cref="T:Lucene.Net.Misc.HighFreqTerms"/> class extracts the top n most frequent terms
+            (by document frequency) from an existing Lucene index and reports their
+            document frequency.
+            <para>
+            If the -t flag is given, both document frequency and total tf (total
+            number of occurrences) are reported, ordered by descending total tf.
+            
+            </para>
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Misc.HighFreqTerms.GetHighFreqTerms(Lucene.Net.Index.IndexReader,System.Int32,System.String,System.Collections.Generic.IComparer{Lucene.Net.Misc.TermStats})">
+            <summary>
+            Returns <see cref="T:TermStats[]"/> ordered by the specified comparer
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.HighFreqTerms.DocFreqComparer">
+            <summary>
+            Compares terms by <see cref="P:Lucene.Net.Misc.TermStats.DocFreq"/>
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.HighFreqTerms.TotalTermFreqComparer">
+            <summary>
+            Compares terms by <see cref="P:Lucene.Net.Misc.TermStats.TotalTermFreq"/> 
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.HighFreqTerms.TermStatsQueue">
+            <summary>
+            Priority queue for <see cref="T:Lucene.Net.Misc.TermStats"/> objects
+            
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.IndexMergeTool">
+            <summary>
+            Merges indices specified on the command line into the index
+            specified as the first command line argument.
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Misc.SweetSpotSimilarity">
+            <summary>
+            <para>
+            A similarity with a lengthNorm that provides for a "plateau" of
+            equally good lengths, and tf helper functions.
+            </para>
+            <para>
+            For lengthNorm, A min/max can be specified to define the
+            plateau of lengths that should all have a norm of 1.0.
+            Below the min, and above the max the lengthNorm drops off in a
+            sqrt function.
+            </para>
+            <para>
+            For tf, baselineTf and hyperbolicTf functions are provided, which
+            subclasses can choose between.
+            </para>
+            </summary>
+            <a href="doc-files/ss.gnuplot">A Gnuplot file used to generate some of the visualizations refrenced from each function.</a>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.SetBaselineTfFactors(System.Single,System.Single)">
+            <summary>
+            Sets the baseline and minimum function variables for baselineTf
+            </summary>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.BaselineTf(System.Single)"/>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.SetHyperbolicTfFactors(System.Single,System.Single,System.Double,System.Single)">
+            <summary>
+            Sets the function variables for the hyperbolicTf functions
+            </summary>
+            <param name="min"> the minimum tf value to ever be returned (default: 0.0) </param>
+            <param name="max"> the maximum tf value to ever be returned (default: 2.0) </param>
+            <param name="base"> the base value to be used in the exponential for the hyperbolic function (default: 1.3) </param>
+            <param name="xoffset"> the midpoint of the hyperbolic function (default: 10.0) </param>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.HyperbolicTf(System.Single)"/>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.SetLengthNormFactors(System.Int32,System.Int32,System.Single,System.Boolean)">
+            <summary>
+            Sets the default function variables used by lengthNorm when no field
+            specific variables have been set.
+            </summary>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.ComputeLengthNorm(System.Int32)"/>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.LengthNorm(Lucene.Net.Index.FieldInvertState)">
+            <summary>
+            Implemented as 
+            <c>
+            state.Boost * ComputeLengthNorm(numTokens) 
+            </c> 
+            where numTokens does not count overlap tokens if
+            discountOverlaps is true by default or true for this
+            specific field. 
+            </summary>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.ComputeLengthNorm(System.Int32)">
+            <summary>
+            Implemented as:
+            <code>
+            1/sqrt( steepness * (Math.Abs(x-min) + Math.Abs(x-max) - (max-min)) + 1 )
+            </code>.
+            
+            <para>
+            This degrades to <code>1/Math.Sqrt(x)</code> when min and max are both 1 and
+            steepness is 0.5
+            </para>
+            
+            <para>
+            :TODO: potential optimization is to just flat out return 1.0f if numTerms
+            is between min and max.
+            </para>
+            </summary>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.SetLengthNormFactors(System.Int32,System.Int32,System.Single,System.Boolean)"/>
+            <a href="doc-files/ss.computeLengthNorm.svg">An SVG visualization of this function</a>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.Tf(System.Single)">
+            <summary>
+            Delegates to baselineTf
+            </summary>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.BaselineTf(System.Single)"/>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.BaselineTf(System.Single)">
+            <summary>
+            Implemented as:
+            <code>
+             (x &lt;= min) &#63; base : Math.Sqrt(x+(base**2)-min)
+            </code>
+            ...but with a special case check for 0.
+            <para>
+            This degrates to <code>Math.Sqrt(x)</code> when min and base are both 0
+            </para>
+            </summary>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.SetBaselineTfFactors(System.Single,System.Single)"/>
+            <a href="doc-files/ss.baselineTf.svg">An SVG visualization of this function</a>
+        </member>
+        <member name="M:Lucene.Net.Misc.SweetSpotSimilarity.HyperbolicTf(System.Single)">
+            <summary>
+            Uses a hyperbolic tangent function that allows for a hard max...
+            
+            <code>
+            tf(x)=min+(max-min)/2*(((base**(x-xoffset)-base**-(x-xoffset))/(base**(x-xoffset)+base**-(x-xoffset)))+1)
+            </code>
+            
+            <para>
+            This code is provided as a convenience for subclasses that want
+            to use a hyperbolic tf function.
+            </para>
+            </summary>
+            <seealso cref="M:Lucene.Net.Misc.SweetSpotSimilarity.SetHyperbolicTfFactors(System.Single,System.Single,System.Double,System.Single)"/>
+            <a href="doc-files/ss.hyperbolicTf.svg">An SVG visualization of this function</a>
+        </member>
+        <member name="T:Lucene.Net.Misc.TermStats">
+            <summary>
+            Holder for a term along with its statistics
+            (<see cref="P:Lucene.Net.Misc.TermStats.DocFreq"/> and <see cref="P:Lucene.Net.Misc.TermStats.TotalTermFreq"/>).
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Util.Fst.ListOfOutputs`1">
+            <summary>
+            Wraps another Outputs implementation and encodes one or
+            more of its output values.  You can use this when a single
+            input may need to map to more than one output,
+            maintaining order: pass the same input with a different
+            output by calling <see cref="M:Lucene.Net.Util.Fst.Builder`1.Add(Lucene.Net.Util.Int32sRef,`0)"/> multiple
+            times.  The builder will then combine the outputs using
+            the <see cref="M:Lucene.Net.Util.Fst.Outputs`1.Merge(`0,`0)"/> method.
+            
+            <para>The resulting FST may not be minimal when an input has
+            more than one output, as this requires pushing all
+            multi-output values to a final state.
+            
+            </para>
+            <para>NOTE: the only way to create multiple outputs is to
+            add the same input to the FST multiple times in a row.  This is
+            how the FST maps a single input to multiple outputs (e.g. you
+            cannot pass a List&lt;Object&gt; to <see cref="M:Lucene.Net.Util.Fst.Builder`1.Add(Lucene.Net.Util.Int32sRef,`0)"/>).  If
+            your outputs are longs, and you need at most 2, then use
+            <see cref="T:Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs"/> instead since it stores
+            the outputs more compactly (by stealing a bit from each
+            long value).
+            
+            </para>
+            <para>NOTE: this cannot wrap itself (ie you cannot make an
+            FST with List&lt;List&lt;Object&gt;&gt; outputs using this).
+            
+            @lucene.experimental
+            </para>
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs">
+            <summary>
+            An FST <see cref="T:Lucene.Net.Util.Fst.Outputs`1"/> implementation where each output
+            is one or two non-negative long values.  If it's a
+            <see cref="T:System.Single"/> output, <see cref="T:System.Nullable`1"/> is 
+            returned; else, <see cref="T:Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs.TwoInt64s"/>.  Order
+            is preserved in the <see cref="T:Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs.TwoInt64s"/> case, ie .first is the first
+            input/output added to <see cref="T:Lucene.Net.Util.Fst.Builder`1"/>, and .second is the
+            second.  You cannot store 0 output with this (that's
+            reserved to mean "no output")!
+            
+            <para>NOTE: the only way to create a TwoLongs output is to
+            add the same input to the FST twice in a row.  This is
+            how the FST maps a single input to two outputs (e.g. you
+            cannot pass a <see cref="T:Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs.TwoInt64s"/> to <see cref="M:Lucene.Net.Util.Fst.Builder`1.Add(Lucene.Net.Util.Int32sRef,`0)"/>.  If you
+            need more than two then use <see cref="T:Lucene.Net.Util.Fst.ListOfOutputs`1"/>, but if
+            you only have at most 2 then this implementation will
+            require fewer bytes as it steals one bit from each long
+            value.
+            
+            </para>
+            <para>NOTE: the resulting FST is not guaranteed to be minimal!
+            See <see cref="T:Lucene.Net.Util.Fst.Builder`1"/>.
+            </para>
+            <para>
+            NOTE: This was UpToTwoPositiveIntOutputs in Lucene - the data type (int) was wrong there - it should have been long
+            </para>
+            @lucene.experimental
+            </summary>
+        </member>
+        <member name="T:Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs.TwoInt64s">
+            <summary>
+            Holds two long outputs.
+            <para/>
+            NOTE: This was TwoLongs in Lucene
+            </summary>
+        </member>
+    </members>
+</doc>
