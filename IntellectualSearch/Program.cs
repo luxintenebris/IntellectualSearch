@@ -124,17 +124,25 @@ namespace IntellectualSearch
                     foundDocs = topDocs.ScoreDocs.Take(maxSearchItems).Union(foundDocs);
                 }
                 foundDocs = foundDocs.OrderByDescending(x => x.Score).Take(maxSearchItems).ToArray();
+                
+               // var i = 0;
+                List<string> resD = new List<string>();
 
-                var i = 0;
                 foreach (var doc in foundDocs)
                 {
                     //read back a doc from results
                     Document resultDoc = searcher.Doc(doc.Doc);
-
                     string domainFull = resultDoc.Get(returnField);
                     string domain = Helper.SplitAndReturnLastWord(domainFull, @"//");
-                    Console.WriteLine($"Domain of result {i + 1}: {domain} {doc.Score}");
-                    i++;
+                    resD.Add(domain);
+                    /*Console.WriteLine($"Domain of result {i + 1}: {domain} {doc.Score}");
+                    i++;*/
+                }
+                resD = resD.Distinct().ToList();
+          
+                for (int i = 0; i < resD.Count && i < 10; i++)
+                {
+                    Console.WriteLine($"Domain of result {i + 1}: {resD[i]}");
                 }
             }
         }
@@ -161,15 +169,15 @@ namespace IntellectualSearch
 
             using (LuceneDirectory indexDir = FSDirectory.Open(indexPath))
             {
-                CreateNewsTextIndex(indexDir, "C://Users//Nami//OneDrive//Документы//ИнтПоиск//Archive", filesCountLimit: 6278);
+                CreateNewsTextIndex(indexDir, "C://Users//Nami//OneDrive//Документы//ИнтПоиск//Archive", filesCountLimit: 6676);
 
-                Search(toSearch, new string[] { "title", "content" }, "filename", maxSearchItems: 6278);
+                Search(toSearch, new string[] { "title", "content" }, "filename", maxSearchItems: 6679);
             }
         }
 
         static void Main(string[] args)
         {
-            CreateAndSearchRu("петр");
+            CreateAndSearchRu("боскетбол");
             Console.ReadKey();
         }
     }
