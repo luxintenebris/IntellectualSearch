@@ -111,7 +111,8 @@ namespace IntellectualSearch
                 IndexSearcher searcher = new IndexSearcher(reader);
                 QueryParser parser = new MultiFieldQueryParser(luceneVersion, searchFields, analyzer);
 
-                var searchTerms = new string[] { searchText }.Union(suggestions);
+                // var searchTerms = new string[] { searchText }.Union(suggestions);
+                var searchTerms = suggestions;
                 Console.WriteLine("Searching: " + string.Join(", ", searchTerms));
                 IEnumerable<ScoreDoc> foundDocs = new ScoreDoc[] { }; 
                 
@@ -119,12 +120,18 @@ namespace IntellectualSearch
                 {
                     Query query = parser.Parse(searchTerm);
                     TopDocs topDocs = searcher.Search(query, n: maxSearchItems);         //indicate we want the first 3 results
-
                     Console.WriteLine($"Matching results: {topDocs.TotalHits}");
                     foundDocs = topDocs.ScoreDocs.Take(maxSearchItems).Union(foundDocs);
                 }
+                IEnumerable<ScoreDoc> resText = new ScoreDoc[] { };
+                Query queryText = parser.Parse(searchText);
+                TopDocs topDocs1 = searcher.Search(queryText, n: maxSearchItems);         //indicate we want the first 3 results
+                Console.WriteLine($"Matching results: {topDocs1.TotalHits}");
+                resText = topDocs1.ScoreDocs.Take(maxSearchItems).Union(resText);
+
+
                 foundDocs = foundDocs.OrderByDescending(x => x.Score).Take(maxSearchItems).ToArray();
-                
+                foundDocs = resText.Union(foundDocs);
                // var i = 0;
                 List<string> resD = new List<string>();
 
@@ -177,7 +184,7 @@ namespace IntellectualSearch
 
         static void Main(string[] args)
         {
-            CreateAndSearchRu("боскетбол");
+            CreateAndSearchRu("алкоголь");
             Console.ReadKey();
         }
     }
